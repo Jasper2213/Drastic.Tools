@@ -2,11 +2,10 @@
 // Copyright (c) Drastic Actions. All rights reserved.
 // </copyright>
 
+using Microsoft.UI.Xaml;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
-using Drastic.Tray;
-using Microsoft.UI.Xaml;
 
 namespace Drastic.Tray.Sample.WinUI
 {
@@ -15,14 +14,14 @@ namespace Drastic.Tray.Sample.WinUI
     /// </summary>
     public partial class App : Application
     {
-        private TrayIcon icon;
+        private readonly TrayIcon icon;
 
         private Window? window;
 
         public App()
         {
-            var trayImage = new TrayImage(System.Drawing.Image.FromStream(GetResourceFileContent("TrayIcon.ico")!));
-            var menuItems = new List<TrayMenuItem>
+            TrayImage trayImage = new TrayImage(System.Drawing.Image.FromStream(GetResourceFileContent("TrayIcon.ico")!));
+            List<TrayMenuItem> menuItems = new List<TrayMenuItem>
             {
                 new TrayMenuItem("Hello!", trayImage, async () => { }),
                 new TrayMenuItem("From!", trayImage, async () => { }),
@@ -57,8 +56,8 @@ namespace Drastic.Tray.Sample.WinUI
         /// <returns>Stream.</returns>
         public static Stream? GetResourceFileContent(string fileName)
         {
-            var assembly = Assembly.GetExecutingAssembly();
-            var resourceName = "Drastic.Tray.Sample.WinUI." + fileName;
+            Assembly assembly = Assembly.GetExecutingAssembly();
+            string resourceName = "Drastic.Tray.Sample.WinUI." + fileName;
             if (assembly is null)
             {
                 return null;

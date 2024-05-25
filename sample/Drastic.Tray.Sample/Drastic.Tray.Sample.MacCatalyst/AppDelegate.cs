@@ -2,7 +2,6 @@
 // Copyright (c) Drastic Actions. All rights reserved.
 // </copyright>
 
-using AppKit;
 using Drastic.PureLayout;
 
 namespace Drastic.Tray.Sample.MacCatalyst;
@@ -35,7 +34,7 @@ public class AppDelegate : UIApplicationDelegate
 public class SampleViewController : UIViewController
 {
     public UIButton TrayButton = new UIButton(UIButtonType.RoundedRect);
-    private UIWindow window;
+    private readonly UIWindow window;
 
     private TrayIcon? trayIcon;
 
@@ -55,9 +54,9 @@ public class SampleViewController : UIViewController
 
     private async void TrayButton_TouchUpInside(object? sender, EventArgs e)
     {
-        var menuItems = new List<TrayMenuItem>();
-        var image = UIImage.GetSystemImage("trophy.circle");
-        var trayImage = new TrayImage(image!);
+        List<TrayMenuItem> menuItems = new List<TrayMenuItem>();
+        UIImage? image = UIImage.GetSystemImage("trophy.circle");
+        TrayImage trayImage = new TrayImage(image!);
         menuItems.Add(new TrayMenuItem("Hello!", trayImage, async () => { }, "h"));
         menuItems.Add(new TrayMenuItem());
         menuItems.Add(new TrayMenuItem("From!", trayImage, async () => { }, "f"));
@@ -67,7 +66,7 @@ public class SampleViewController : UIViewController
         this.trayIcon.RightClicked += (object? sender, TrayClickedEventArgs e) => { this.trayIcon.OpenMenu(); };
         this.trayIcon.LeftClicked += (object? sender, TrayClickedEventArgs e) =>
         {
-            var okAlertController = UIAlertController.Create("Drastic.Tray.Sample", "Welcome!", UIAlertControllerStyle.Alert);
+            UIAlertController okAlertController = UIAlertController.Create("Drastic.Tray.Sample", "Welcome!", UIAlertControllerStyle.Alert);
             okAlertController.AddAction(UIAlertAction.Create("OK", UIAlertActionStyle.Default, null));
             this.PresentViewController(okAlertController, true, null);
         };

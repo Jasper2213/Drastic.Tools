@@ -2,8 +2,6 @@
 // Copyright (c) Drastic Actions. All rights reserved.
 // </copyright>
 
-using System;
-
 namespace Drastic.Tray
 {
 #pragma warning disable SA1600 // Elements should be documented

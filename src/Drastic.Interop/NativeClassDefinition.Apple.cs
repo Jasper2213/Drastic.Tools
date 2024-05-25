@@ -95,7 +95,7 @@ namespace Drastic.Interop
 
             IntPtr instance = ObjC.Call(this.Handle, "new");
 
-            var parentHandle = GCHandle.Alloc(parent, GCHandleType.Normal);
+            GCHandle parentHandle = GCHandle.Alloc(parent, GCHandleType.Normal);
             ObjC.SetVariableValue(instance, this.ivar, GCHandle.ToIntPtr(parentHandle));
 
             return new NativeClassInstance(instance, parentHandle);

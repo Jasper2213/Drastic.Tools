@@ -2,20 +2,15 @@
 // Copyright (c) Drastic Actions. All rights reserved.
 // </copyright>
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection.Emit;
-using System.Runtime.InteropServices;
-using System.Threading.Tasks;
-using AddressBook;
 using AppKit;
 using CoreFoundation;
 using CoreGraphics;
 using Drastic.Interop;
 using Foundation;
 using ObjCRuntime;
-using UIKit;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Drastic.Tray
 {
@@ -24,10 +19,10 @@ namespace Drastic.Tray
     /// </summary>
     public partial class TrayIcon : NSObject, ITrayIcon
     {
-        private NSObject statusBarItem;
-        private ShimNSMenu menu;
-        private NSObject? statusBarButton;
-        private bool setToSystemTheme;
+        private readonly NSObject statusBarItem;
+        private readonly ShimNSMenu menu;
+        private readonly NSObject? statusBarButton;
+        private readonly bool setToSystemTheme;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="TrayIcon"/> class.
@@ -43,7 +38,7 @@ namespace Drastic.Tray
 
             this.menu = new ShimNSMenu();
 
-            var systemStatusBarObj = GetNSStatusBar().PerformSelector(new Selector("systemStatusBar"));
+            NSObject systemStatusBarObj = GetNSStatusBar().PerformSelector(new Selector("systemStatusBar"));
             this.statusBarItem = Runtime.GetNSObject(Drastic.Interop.ObjC.Call(systemStatusBarObj.Handle, "statusItemWithLength:", -1f))!;
             this.statusBarButton = Runtime.GetNSObject(Drastic.Interop.ObjC.Call(this.statusBarItem.Handle, "button"))!;
 
@@ -67,14 +62,14 @@ namespace Drastic.Tray
 
         public CGRect GetFrame()
         {
-            var statusBarButton = Runtime.GetNSObject(Drastic.Interop.ObjC.Call(this.statusBarItem!.Handle, "button"));
-            var nsButtonWindow = Runtime.GetNSObject(Drastic.Interop.ObjC.Call(statusBarButton!.Handle, "window"));
+            NSObject statusBarButton = Runtime.GetNSObject(Drastic.Interop.ObjC.Call(this.statusBarItem!.Handle, "button"));
+            NSObject nsButtonWindow = Runtime.GetNSObject(Drastic.Interop.ObjC.Call(statusBarButton!.Handle, "window"));
             if (nsButtonWindow is null)
             {
                 return new CGRect(0, 0, 0, 0);
             }
 
-            var windowFrame = (NSValue)nsButtonWindow.ValueForKey(new Foundation.NSString("frame"));
+            NSValue windowFrame = (NSValue)nsButtonWindow.ValueForKey(new Foundation.NSString("frame"));
 
             return windowFrame.CGRectValue;
         }
@@ -89,7 +84,7 @@ namespace Drastic.Tray
         {
             this.menu.RemoveAllItems();
 
-            foreach (var item in this.menuItems)
+            foreach (TrayMenuItem item in this.menuItems)
             {
                 if (item.IsSeperator)
                 {
@@ -97,7 +92,7 @@ namespace Drastic.Tray
                     continue;
                 }
 
-                var nsMenuItem = new ShimNSMenuItem(item);
+                ShimNSMenuItem nsMenuItem = new ShimNSMenuItem(item);
                 this.menu.AddItem(nsMenuItem);
             }
         }
@@ -110,19 +105,19 @@ namespace Drastic.Tray
 
         private static NSObject GetNSMenuItem()
         {
-            var item = Runtime.GetNSObject(Drastic.Interop.AppKit.Call("NSMenuItem", "alloc"))!;
+            NSObject item = Runtime.GetNSObject(Drastic.Interop.AppKit.Call("NSMenuItem", "alloc"))!;
             return item;
         }
 
         private static void NSApplicationActivateIgnoringOtherApps(bool ignoreSetting = true)
         {
-            var sharedApp = Drastic.Interop.AppKit.Call("NSApplication", "sharedApplication");
+            nint sharedApp = Drastic.Interop.AppKit.Call("NSApplication", "sharedApplication");
             Drastic.Interop.ObjC.Call(sharedApp, "activateIgnoringOtherApps:", ignoreSetting);
         }
 
         private static NSObject GetNSApplicationSharedApplicationCurrentEvent()
         {
-            var sharedApp = Drastic.Interop.AppKit.Call("NSApplication", "sharedApplication");
+            nint sharedApp = Drastic.Interop.AppKit.Call("NSApplication", "sharedApplication");
             return Runtime.GetNSObject<NSObject>(Drastic.Interop.ObjC.Call(sharedApp, "currentEvent"))!;
         }
 
@@ -135,8 +130,8 @@ namespace Drastic.Tray
         [Export("handleButtonClick:")]
         private void HandleClick(NSObject senderStatusBarButton)
         {
-            var test = GetNSApplicationSharedApplicationCurrentEvent()!;
-            var type = (NSEventType)Drastic.Interop.ObjC.Call(test.Handle, "type");
+            NSObject test = GetNSApplicationSharedApplicationCurrentEvent()!;
+            NSEventType type = (NSEventType)Drastic.Interop.ObjC.Call(test.Handle, "type");
             NSApplicationActivateIgnoringOtherApps(true);
             switch (type)
             {
@@ -157,7 +152,7 @@ namespace Drastic.Tray
             // Matching what is on macOS...
             // this.statusBarItem!.Button.Image.Size = new CGSize(20, 20);
             // this.statusBarItem!.Button.Frame = new CGRect(0, 0, 40, 24);
-            var cgRect = new CGRect(0, 0, 40, 24);
+            CGRect cgRect = new CGRect(0, 0, 40, 24);
             image.Image.Size = new CoreGraphics.CGSize(20, 20);
             Drastic.Interop.ObjC.Call(statusBarButton!.Handle, "setImage:", image.Image.Handle);
             Drastic.Interop.ObjC.Call(statusBarButton.Handle, "setFrame:", cgRect);
@@ -272,14 +267,14 @@ namespace Drastic.Tray
 
             private static NativeClassDefinition CreateCallbackClass()
             {
-                var definition = NativeClassDefinition.FromObject("DrasticInteropMenuCallback");
+                NativeClassDefinition definition = NativeClassDefinition.FromObject("DrasticInteropMenuCallback");
 
                 definition.AddMethod<MenuCallbackDelegate>(
                     "menuCallback:",
                     "v@:@",
                     (self, op, menu) =>
                     {
-                        var instance = definition.GetParent<ShimNSMenuItem>(self);
+                        ShimNSMenuItem instance = definition.GetParent<ShimNSMenuItem>(self);
                         instance.Item.Action?.Invoke();
                     });
 

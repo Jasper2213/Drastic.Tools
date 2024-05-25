@@ -4,7 +4,6 @@
 
 using System;
 using System.Runtime.InteropServices;
-using Drastic.Interop;
 
 namespace Drastic.Interop
 {

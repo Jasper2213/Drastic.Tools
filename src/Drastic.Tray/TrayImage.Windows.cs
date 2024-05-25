@@ -2,8 +2,6 @@
 // Copyright (c) Drastic Actions. All rights reserved.
 // </copyright>
 
-using System.Drawing.Imaging;
-
 namespace Drastic.Tray
 {
     /// <summary>

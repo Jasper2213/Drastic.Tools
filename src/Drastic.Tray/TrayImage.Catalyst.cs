@@ -2,10 +2,10 @@
 // Copyright (c) Drastic Actions. All rights reserved.
 // </copyright>
 
+using ObjCRuntime;
 using System;
 using System.IO;
 using System.Runtime.InteropServices;
-using ObjCRuntime;
 using UIKit;
 
 namespace Drastic.Tray
@@ -21,7 +21,7 @@ namespace Drastic.Tray
         /// <param name="stream">Image stream.</param>
         public TrayImage(Stream stream)
         {
-            var imageStream = Foundation.NSData.FromStream(stream)!;
+            Foundation.NSData imageStream = Foundation.NSData.FromStream(stream)!;
             this.Image = Runtime.GetNSObject<AppKit.NSImage>(IntPtr_objc_msgSend(ObjCRuntime.Class.GetHandle("NSImage"), Selector.GetHandle("alloc")))!;
             IntPtr_objc_msgSend_IntPtr(this.Image.Handle, Selector.GetHandle("initWithData:"), imageStream.Handle);
         }
@@ -32,7 +32,7 @@ namespace Drastic.Tray
         /// <param name="image">UIImage to use for the tray icon.</param>
         public TrayImage(UIImage image)
         {
-            var imageStream = Foundation.NSData.FromStream(image.AsPNG().AsStream())!;
+            Foundation.NSData imageStream = Foundation.NSData.FromStream(image.AsPNG().AsStream())!;
             this.Image = Runtime.GetNSObject<AppKit.NSImage>(IntPtr_objc_msgSend(ObjCRuntime.Class.GetHandle("NSImage"), Selector.GetHandle("alloc")))!;
             IntPtr_objc_msgSend_IntPtr(this.Image.Handle, Selector.GetHandle("initWithData:"), imageStream.Handle);
         }

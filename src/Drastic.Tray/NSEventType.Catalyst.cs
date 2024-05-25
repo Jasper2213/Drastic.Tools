@@ -2,9 +2,6 @@
 // Copyright (c) Drastic Actions. All rights reserved.
 // </copyright>
 
-using System;
-using System.Runtime.Versioning;
-
 namespace Drastic.Tray
 {
 #pragma warning disable SA1602 // Enumeration items should be documented

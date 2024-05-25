@@ -14,8 +14,8 @@ namespace Drastic.Tray
     /// </summary>
     public partial class TrayIcon : ITrayIcon
     {
-        private ContextMenuStrip contextMenuStrip;
-        private NotifyIcon notifyIcon;
+        private readonly ContextMenuStrip contextMenuStrip;
+        private readonly NotifyIcon notifyIcon;
         private Icon? icon;
 
         /// <summary>
@@ -72,8 +72,10 @@ namespace Drastic.Tray
                 return new ToolStripSeparator();
             }
 
-            var menu = new DrasticToolStripMenuItem(item);
-            menu.Text = item.Text;
+            DrasticToolStripMenuItem menu = new DrasticToolStripMenuItem(item)
+            {
+                Text = item.Text
+            };
             if (item.Icon is not null)
             {
                 menu.Image = item.Icon.Image;
@@ -86,13 +88,13 @@ namespace Drastic.Tray
         {
             this.menuItems = menuItems.ToList();
             this.contextMenuStrip.Items.Clear();
-            var items = this.menuItems.Select(n => this.GenerateItem(n)).Reverse().ToArray();
+            ToolStripItem[] items = this.menuItems.Select(n => this.GenerateItem(n)).Reverse().ToArray();
             this.contextMenuStrip.Items.AddRange(items);
         }
 
         public void UpdateImage(TrayImage image)
         {
-            var test = new Bitmap(image?.Image!);
+            Bitmap test = new Bitmap(image?.Image!);
             this.icon = Icon.FromHandle(test.GetHicon());
             this.notifyIcon.Icon = this.icon;
         }
