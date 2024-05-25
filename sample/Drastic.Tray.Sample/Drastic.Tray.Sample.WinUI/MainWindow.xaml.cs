@@ -15,7 +15,7 @@ namespace Drastic.Tray.Sample.WinUI
     {
         public MainWindow()
         {
-            this.InitializeComponent();
+            InitializeComponent();
         }
 
         private void MyButton_Click(object sender, RoutedEventArgs e)

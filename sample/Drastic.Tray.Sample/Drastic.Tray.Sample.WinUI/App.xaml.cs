@@ -27,16 +27,16 @@ namespace Drastic.Tray.Sample.WinUI
                 new TrayMenuItem("From!", trayImage, async () => { }),
                 new TrayMenuItem("Windows!", trayImage, async () => { }),
             };
-            this.icon = new TrayIcon("Tray Icon", trayImage, menuItems);
-            this.icon.RightClicked += (object? sender, TrayClickedEventArgs e) =>
+            icon = new TrayIcon("Tray Icon", trayImage, menuItems);
+            icon.RightClicked += (object? sender, TrayClickedEventArgs e) =>
             {
                 System.Diagnostics.Debug.WriteLine("Right Click!");
             };
-            this.icon.LeftClicked += (object? sender, TrayClickedEventArgs e) =>
+            icon.LeftClicked += (object? sender, TrayClickedEventArgs e) =>
             {
                 System.Diagnostics.Debug.WriteLine("Left Click!");
             };
-            this.InitializeComponent();
+            InitializeComponent();
         }
 
         /// <summary>
@@ -45,8 +45,8 @@ namespace Drastic.Tray.Sample.WinUI
         /// <param name="args">Details about the launch request and process.</param>
         protected override void OnLaunched(Microsoft.UI.Xaml.LaunchActivatedEventArgs args)
         {
-            this.window = new MainWindow();
-            this.window.Activate();
+            window = new MainWindow();
+            window.Activate();
         }
 
         /// <summary>

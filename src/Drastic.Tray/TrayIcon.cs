@@ -25,7 +25,7 @@ namespace Drastic.Tray
         /// <inheritdoc/>
         public void Dispose()
         {
-            this.Dispose(disposing: true);
+            Dispose(disposing: true);
             GC.SuppressFinalize(this);
         }
 
@@ -35,14 +35,14 @@ namespace Drastic.Tray
         /// <param name="disposing">Is Disposing.</param>
         protected virtual void Dispose(bool disposing)
         {
-            if (!this.disposedValue)
+            if (!disposedValue)
             {
                 if (disposing)
                 {
-                    this.NativeElementDispose();
+                    NativeElementDispose();
                 }
 
-                this.disposedValue = true;
+                disposedValue = true;
             }
         }
 

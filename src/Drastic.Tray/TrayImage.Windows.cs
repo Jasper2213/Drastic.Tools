@@ -15,7 +15,7 @@ namespace Drastic.Tray
         /// <param name="image">System.Drawing.Icon.</param>
         public TrayImage(System.Drawing.Image image)
         {
-            this.Image = image;
+            Image = image;
         }
 
         public System.Drawing.Image Image { get; }

@@ -13,13 +13,13 @@ namespace Drastic.Interop
 
         internal NativeClassInstance(IntPtr instance, GCHandle parentHandle)
         {
-            this.Handle = instance;
+            Handle = instance;
             this.parentHandle = parentHandle;
         }
 
         ~NativeClassInstance()
         {
-            this.Dispose(false);
+            Dispose(false);
         }
 
         public IntPtr Handle { get; }
@@ -27,13 +27,13 @@ namespace Drastic.Interop
         /// <inheritdoc/>
         public void Dispose()
         {
-            this.Dispose(true);
+            Dispose(true);
             GC.SuppressFinalize(this);
         }
 
         private void Dispose(bool disposing)
         {
-            this.parentHandle.Free();
+            parentHandle.Free();
         }
     }
 }

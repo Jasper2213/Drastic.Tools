@@ -22,8 +22,8 @@ namespace Drastic.Tray
         public TrayImage(Stream stream)
         {
             Foundation.NSData imageStream = Foundation.NSData.FromStream(stream)!;
-            this.Image = Runtime.GetNSObject<AppKit.NSImage>(IntPtr_objc_msgSend(ObjCRuntime.Class.GetHandle("NSImage"), Selector.GetHandle("alloc")))!;
-            IntPtr_objc_msgSend_IntPtr(this.Image.Handle, Selector.GetHandle("initWithData:"), imageStream.Handle);
+            Image = Runtime.GetNSObject<AppKit.NSImage>(IntPtr_objc_msgSend(ObjCRuntime.Class.GetHandle("NSImage"), Selector.GetHandle("alloc")))!;
+            IntPtr_objc_msgSend_IntPtr(Image.Handle, Selector.GetHandle("initWithData:"), imageStream.Handle);
         }
 
         /// <summary>
@@ -33,8 +33,8 @@ namespace Drastic.Tray
         public TrayImage(UIImage image)
         {
             Foundation.NSData imageStream = Foundation.NSData.FromStream(image.AsPNG().AsStream())!;
-            this.Image = Runtime.GetNSObject<AppKit.NSImage>(IntPtr_objc_msgSend(ObjCRuntime.Class.GetHandle("NSImage"), Selector.GetHandle("alloc")))!;
-            IntPtr_objc_msgSend_IntPtr(this.Image.Handle, Selector.GetHandle("initWithData:"), imageStream.Handle);
+            Image = Runtime.GetNSObject<AppKit.NSImage>(IntPtr_objc_msgSend(ObjCRuntime.Class.GetHandle("NSImage"), Selector.GetHandle("alloc")))!;
+            IntPtr_objc_msgSend_IntPtr(Image.Handle, Selector.GetHandle("initWithData:"), imageStream.Handle);
         }
 
         public AppKit.NSImage Image { get; }

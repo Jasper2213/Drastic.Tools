@@ -24,8 +24,8 @@ namespace Drastic.Interop
             }
 
             this.protocols = protocols ?? throw new ArgumentNullException(nameof(protocols));
-            this.callbacks = new List<Delegate>();
-            this.Handle = ObjC.AllocateClassPair(parent, name, IntPtr.Zero);
+            callbacks = new List<Delegate>();
+            Handle = ObjC.AllocateClassPair(parent, name, IntPtr.Zero);
         }
 
         public IntPtr Handle { get; private set; }
@@ -43,16 +43,16 @@ namespace Drastic.Interop
         public void AddMethod<T>(string name, string signature, T callback)
             where T : Delegate
         {
-            if (this.registered)
+            if (registered)
             {
                 throw new InvalidOperationException("Native class is already declared and registered");
             }
 
             // keep reference to callback or it will get garbage collected
-            this.callbacks.Add(callback);
+            callbacks.Add(callback);
 
             ObjC.AddMethod(
-                this.Handle,
+                Handle,
                 ObjC.RegisterName(name),
                 callback,
                 signature);
@@ -60,19 +60,19 @@ namespace Drastic.Interop
 
         public void FinishDeclaration()
         {
-            if (this.registered)
+            if (registered)
             {
                 throw new InvalidOperationException("Native class is already declared and registered");
             }
 
-            this.registered = true;
+            registered = true;
 
             // variable to hold reference to .NET object that creates an instance
             const string variableName = "_SEInstance";
-            ObjC.AddVariable(this.Handle, variableName, new IntPtr(IntPtr.Size), (byte)Math.Log(IntPtr.Size, 2), "@");
-            this.ivar = ObjC.GetVariable(this.Handle, variableName);
+            ObjC.AddVariable(Handle, variableName, new IntPtr(IntPtr.Size), (byte)Math.Log(IntPtr.Size, 2), "@");
+            ivar = ObjC.GetVariable(Handle, variableName);
 
-            foreach (IntPtr protocol in this.protocols)
+            foreach (IntPtr protocol in protocols)
             {
                 if (protocol == IntPtr.Zero)
                 {
@@ -80,30 +80,30 @@ namespace Drastic.Interop
                     continue;
                 }
 
-                ObjC.AddProtocol(this.Handle, protocol);
+                ObjC.AddProtocol(Handle, protocol);
             }
 
-            ObjC.RegisterClassPair(this.Handle);
+            ObjC.RegisterClassPair(Handle);
         }
 
         public NativeClassInstance CreateInstance(object parent)
         {
-            if (!this.registered)
+            if (!registered)
             {
                 throw new InvalidOperationException("Native class is not yet fully declared and registered");
             }
 
-            IntPtr instance = ObjC.Call(this.Handle, "new");
+            IntPtr instance = ObjC.Call(Handle, "new");
 
             GCHandle parentHandle = GCHandle.Alloc(parent, GCHandleType.Normal);
-            ObjC.SetVariableValue(instance, this.ivar, GCHandle.ToIntPtr(parentHandle));
+            ObjC.SetVariableValue(instance, ivar, GCHandle.ToIntPtr(parentHandle));
 
             return new NativeClassInstance(instance, parentHandle);
         }
 
         public T GetParent<T>(IntPtr self)
         {
-            IntPtr handle = ObjC.GetVariableValue(self, this.ivar);
+            IntPtr handle = ObjC.GetVariableValue(self, ivar);
             return (T)GCHandle.FromIntPtr(handle).Target!;
         }
     }

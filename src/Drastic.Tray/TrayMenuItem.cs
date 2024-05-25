@@ -17,8 +17,8 @@ namespace Drastic.Tray
         /// </summary>
         public TrayMenuItem()
         {
-            this.Text = string.Empty;
-            this.IsSeperator = true;
+            Text = string.Empty;
+            IsSeperator = true;
         }
 
         /// <summary>
@@ -29,12 +29,12 @@ namespace Drastic.Tray
         /// <param name="action">Action to perform when clicked.</param>
         public TrayMenuItem(string text, TrayImage? icon = null, Func<Task>? action = null)
         {
-            this.Text = text;
-            this.Icon = icon;
-            this.Action = action;
+            Text = text;
+            Icon = icon;
+            Action = action;
         }
 
-#if MACOS || MACCATALYST
+#if MACCATALYST
 
         /// <summary>
         /// Initializes a new instance of the <see cref="TrayMenuItem"/> class.
@@ -46,11 +46,11 @@ namespace Drastic.Tray
         /// <param name="keyEquivalentModifierMask">Key.</param>
         public TrayMenuItem(string text, TrayImage? icon = null, Func<Task>? action = null, string? keyEquivalent = default, NSEventModifierMask? keyEquivalentModifierMask = default)
         {
-            this.Text = text;
-            this.Icon = icon;
-            this.Action = action;
-            this.KeyEquivalent = keyEquivalent;
-            this.KeyEquivalentModifierMask = keyEquivalentModifierMask;
+            Text = text;
+            Icon = icon;
+            Action = action;
+            KeyEquivalent = keyEquivalent;
+            KeyEquivalentModifierMask = keyEquivalentModifierMask;
         }
 
 #endif
@@ -77,7 +77,7 @@ namespace Drastic.Tray
         /// </summary>
         public Func<Task>? Action { get; }
 
-#if MACOS || MACCATALYST
+#if MACCATALYST
 
         /// <summary>
         /// Gets the Key Equivalent shortcut.

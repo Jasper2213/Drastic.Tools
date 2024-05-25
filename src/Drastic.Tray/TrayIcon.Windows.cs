@@ -26,16 +26,16 @@ namespace Drastic.Tray
         /// <param name="menuItems">Items to populate context menu. Optional.</param>
         public TrayIcon(string name, TrayImage image, List<TrayMenuItem>? menuItems = null)
         {
-            this.notifyIcon = new NotifyIcon();
-            this.UpdateName(name);
-            this.UpdateImage(image);
+            notifyIcon = new NotifyIcon();
+            UpdateName(name);
+            UpdateImage(image);
             this.menuItems = menuItems ?? new List<TrayMenuItem>();
-            this.contextMenuStrip = new ContextMenuStrip();
-            this.contextMenuStrip.ItemClicked += this.ContextMenuStrip_ItemClicked;
-            this.notifyIcon.ContextMenuStrip = this.contextMenuStrip;
-            this.notifyIcon.MouseClick += this.NotifyIcon_MouseClick;
-            this.notifyIcon.Visible = true;
-            this.UpdateMenu(this.menuItems);
+            contextMenuStrip = new ContextMenuStrip();
+            contextMenuStrip.ItemClicked += ContextMenuStrip_ItemClicked;
+            notifyIcon.ContextMenuStrip = contextMenuStrip;
+            notifyIcon.MouseClick += NotifyIcon_MouseClick;
+            notifyIcon.Visible = true;
+            UpdateMenu(this.menuItems);
         }
 
         private void ContextMenuStrip_ItemClicked(object? sender, ToolStripItemClickedEventArgs e)
@@ -48,20 +48,20 @@ namespace Drastic.Tray
 
         private void NativeElementDispose()
         {
-            this.notifyIcon?.Dispose();
-            this.icon?.Dispose();
+            notifyIcon?.Dispose();
+            icon?.Dispose();
         }
 
         private void NotifyIcon_MouseClick(object? sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Left)
             {
-                this.LeftClicked?.Invoke(this, TrayClickedEventArgs.Empty);
+                LeftClicked?.Invoke(this, TrayClickedEventArgs.Empty);
             }
 
             if (e.Button == MouseButtons.Right)
             {
-                this.RightClicked?.Invoke(this, TrayClickedEventArgs.Empty);
+                RightClicked?.Invoke(this, TrayClickedEventArgs.Empty);
             }
         }
 
@@ -87,32 +87,32 @@ namespace Drastic.Tray
         public void UpdateMenu(IEnumerable<TrayMenuItem> menuItems)
         {
             this.menuItems = menuItems.ToList();
-            this.contextMenuStrip.Items.Clear();
-            ToolStripItem[] items = this.menuItems.Select(n => this.GenerateItem(n)).Reverse().ToArray();
-            this.contextMenuStrip.Items.AddRange(items);
+            contextMenuStrip.Items.Clear();
+            ToolStripItem[] items = this.menuItems.Select(n => GenerateItem(n)).Reverse().ToArray();
+            contextMenuStrip.Items.AddRange(items);
         }
 
         public void UpdateImage(TrayImage image)
         {
             Bitmap test = new Bitmap(image?.Image!);
-            this.icon = Icon.FromHandle(test.GetHicon());
-            this.notifyIcon.Icon = this.icon;
+            icon = Icon.FromHandle(test.GetHicon());
+            notifyIcon.Icon = icon;
         }
 
         public void UpdateName(string name)
-            => this.notifyIcon.Text = name;
+            => notifyIcon.Text = name;
 
         private class DrasticToolStripMenuItem : ToolStripMenuItem
         {
             public DrasticToolStripMenuItem(TrayMenuItem item)
             {
-                this.Text = item.Text;
+                Text = item.Text;
                 if (item.Icon is not null)
                 {
-                    this.Image = item.Icon.Image;
+                    Image = item.Icon.Image;
                 }
 
-                this.Item = item;
+                Item = item;
             }
 
             public TrayMenuItem Item { get; }

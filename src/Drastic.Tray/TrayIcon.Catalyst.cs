@@ -36,33 +36,33 @@ namespace Drastic.Tray
             this.setToSystemTheme = setToSystemTheme;
             this.menuItems = menuItems ?? new List<TrayMenuItem>();
 
-            this.menu = new ShimNSMenu();
+            menu = new ShimNSMenu();
 
             NSObject systemStatusBarObj = GetNSStatusBar().PerformSelector(new Selector("systemStatusBar"));
-            this.statusBarItem = Runtime.GetNSObject(Drastic.Interop.ObjC.Call(systemStatusBarObj.Handle, "statusItemWithLength:", -1f))!;
-            this.statusBarButton = Runtime.GetNSObject(Drastic.Interop.ObjC.Call(this.statusBarItem.Handle, "button"))!;
+            statusBarItem = Runtime.GetNSObject(Drastic.Interop.ObjC.Call(systemStatusBarObj.Handle, "statusItemWithLength:", -1f))!;
+            statusBarButton = Runtime.GetNSObject(Drastic.Interop.ObjC.Call(statusBarItem.Handle, "button"))!;
 
-            this.UpdateImage(image, setToSystemTheme);
-            this.UpdateName(name);
+            UpdateImage(image, setToSystemTheme);
+            UpdateName(name);
 
             if (statusBarButton is not null)
             {
                 // Handle click
                 // 26 = NSEventType.OtherMouseUp
                 Drastic.Interop.ObjC.Call(statusBarButton.Handle, "sendActionOn:", (nint)NSEventType.OtherMouseUp);
-                Drastic.Interop.ObjC.Call(statusBarButton.Handle, "setTarget:", this.Handle);
+                Drastic.Interop.ObjC.Call(statusBarButton.Handle, "setTarget:", Handle);
                 Drastic.Interop.ObjC.Call(statusBarButton.Handle, "setAction:", new Selector("handleButtonClick:").Handle);
             }
 
             if (menuItems is not null)
             {
-                this.SetupStatusBarMenu(menuItems);
+                SetupStatusBarMenu(menuItems);
             }
         }
 
         public CGRect GetFrame()
         {
-            NSObject statusBarButton = Runtime.GetNSObject(Drastic.Interop.ObjC.Call(this.statusBarItem!.Handle, "button"));
+            NSObject statusBarButton = Runtime.GetNSObject(Drastic.Interop.ObjC.Call(statusBarItem!.Handle, "button"));
             NSObject nsButtonWindow = Runtime.GetNSObject(Drastic.Interop.ObjC.Call(statusBarButton!.Handle, "window"));
             if (nsButtonWindow is null)
             {
@@ -76,24 +76,24 @@ namespace Drastic.Tray
 
         public void OpenMenu()
         {
-            NativeHandle nonNullHandle = this.menu.GetNonNullHandle("menu");
-            Drastic.Interop.ObjC.Call(this.statusBarItem.Handle, "popUpStatusItemMenu:", nonNullHandle);
+            NativeHandle nonNullHandle = menu.GetNonNullHandle("menu");
+            Drastic.Interop.ObjC.Call(statusBarItem.Handle, "popUpStatusItemMenu:", nonNullHandle);
         }
 
         public void SetupStatusBarMenu(List<TrayMenuItem> menuItems)
         {
-            this.menu.RemoveAllItems();
+            menu.RemoveAllItems();
 
             foreach (TrayMenuItem item in this.menuItems)
             {
                 if (item.IsSeperator)
                 {
-                    this.menu.AddItem(Runtime.GetNSObject<NSObject>(Drastic.Interop.ObjC.Call(Drastic.Interop.AppKit.GetClass("NSMenuItem"), "separatorItem"))!);
+                    menu.AddItem(Runtime.GetNSObject<NSObject>(Drastic.Interop.ObjC.Call(Drastic.Interop.AppKit.GetClass("NSMenuItem"), "separatorItem"))!);
                     continue;
                 }
 
                 ShimNSMenuItem nsMenuItem = new ShimNSMenuItem(item);
-                this.menu.AddItem(nsMenuItem);
+                menu.AddItem(nsMenuItem);
             }
         }
 
@@ -123,8 +123,8 @@ namespace Drastic.Tray
 
         private void NativeElementDispose()
         {
-            this.statusBarItem.Dispose();
-            this.menu.Dispose();
+            statusBarItem.Dispose();
+            menu.Dispose();
         }
 
         [Export("handleButtonClick:")]
@@ -136,16 +136,16 @@ namespace Drastic.Tray
             switch (type)
             {
                 case NSEventType.LeftMouseDown:
-                    this.LeftClicked?.Invoke(this, TrayClickedEventArgs.Empty);
+                    LeftClicked?.Invoke(this, TrayClickedEventArgs.Empty);
                     break;
                 case NSEventType.RightMouseDown:
-                    this.RightClicked?.Invoke(this, TrayClickedEventArgs.Empty);
+                    RightClicked?.Invoke(this, TrayClickedEventArgs.Empty);
                     break;
             }
         }
 
         public void UpdateMenu(IEnumerable<TrayMenuItem> items)
-            => this.SetupStatusBarMenu(items.ToList());
+            => SetupStatusBarMenu(items.ToList());
 
         public void UpdateImage(TrayImage image, bool setToSystemTheme)
         {
@@ -160,7 +160,7 @@ namespace Drastic.Tray
         }
 
         public void UpdateImage(TrayImage image)
-            => this.UpdateImage(image, this.setToSystemTheme);
+            => UpdateImage(image, setToSystemTheme);
 
         public void UpdateName(string name)
         {
@@ -170,24 +170,24 @@ namespace Drastic.Tray
         {
             public ShimNSMenu()
             {
-                this.Handle = Drastic.Interop.AppKit.Call("NSMenu", "new");
+                Handle = Drastic.Interop.AppKit.Call("NSMenu", "new");
             }
 
             public void RemoveAllItems()
             {
-                Drastic.Interop.ObjC.Call(this.Handle, "removeAllItems");
+                Drastic.Interop.ObjC.Call(Handle, "removeAllItems");
             }
 
             public void AddItem(NSObject item)
             {
                 NativeHandle nonNullHandle = item.GetNonNullHandle("newItem");
-                Drastic.Interop.ObjC.Call(this.Handle, "addItem:", nonNullHandle);
+                Drastic.Interop.ObjC.Call(Handle, "addItem:", nonNullHandle);
             }
 
             public void AddItem(ShimNSMenuItem item)
             {
                 NativeHandle nonNullHandle = item.GetNonNullHandle("newItem");
-                Drastic.Interop.ObjC.Call(this.Handle, "addItem:", nonNullHandle);
+                Drastic.Interop.ObjC.Call(Handle, "addItem:", nonNullHandle);
             }
         }
 
@@ -206,32 +206,32 @@ namespace Drastic.Tray
 
             public ShimNSMenuItem(TrayMenuItem item)
             {
-                this.Item = item;
-                this.Handle = Drastic.Interop.AppKit.Call("NSMenuItem", "alloc");
-                ObjC.Call(this.Handle, "initWithTitle:action:keyEquivalent:", Drastic.Interop.NSString.Create(item.Text), ObjC.RegisterName("menuCallback:"), Drastic.Interop.NSString.Create(string.Empty));
-                this.callbackClass = CallbackClassDefinition.CreateInstance(this);
-                this.SetTarget(this.callbackClass.Handle);
+                Item = item;
+                Handle = Drastic.Interop.AppKit.Call("NSMenuItem", "alloc");
+                ObjC.Call(Handle, "initWithTitle:action:keyEquivalent:", Drastic.Interop.NSString.Create(item.Text), ObjC.RegisterName("menuCallback:"), Drastic.Interop.NSString.Create(string.Empty));
+                callbackClass = CallbackClassDefinition.CreateInstance(this);
+                SetTarget(callbackClass.Handle);
 
-                if (this.Item.Icon is not null)
+                if (Item.Icon is not null)
                 {
-                    this.Image = this.Item.Icon.Image;
+                    Image = Item.Icon.Image;
                 }
 
-                this.KeyEquivalent = item.KeyEquivalent;
-                this.KeyEquivalentModifierMask = item.KeyEquivalentModifierMask;
+                KeyEquivalent = item.KeyEquivalent;
+                KeyEquivalentModifierMask = item.KeyEquivalentModifierMask;
             }
 
             public AppKit.NSImage? Image
             {
                 get
                 {
-                    return Runtime.GetNSObject<NSImage>(Drastic.Interop.ObjC.Call(this.Handle, "image"));
+                    return Runtime.GetNSObject<NSImage>(Drastic.Interop.ObjC.Call(Handle, "image"));
                 }
 
                 set
                 {
                     NativeHandle arg = value.GetHandle();
-                    Drastic.Interop.ObjC.Call(this.Handle, "setImage:", arg);
+                    Drastic.Interop.ObjC.Call(Handle, "setImage:", arg);
                 }
             }
 
@@ -239,13 +239,13 @@ namespace Drastic.Tray
             {
                 get
                 {
-                    return CFString.FromHandle(Drastic.Interop.ObjC.Call(this.Handle, "keyEquivalent"));
+                    return CFString.FromHandle(Drastic.Interop.ObjC.Call(Handle, "keyEquivalent"));
                 }
 
                 set
                 {
                     NativeHandle arg = CFString.CreateNative(value);
-                    Drastic.Interop.ObjC.Call(this.Handle, "setKeyEquivalent:", arg);
+                    Drastic.Interop.ObjC.Call(Handle, "setKeyEquivalent:", arg);
                 }
             }
 
@@ -253,14 +253,14 @@ namespace Drastic.Tray
             {
                 get
                 {
-                    return (NSEventModifierMask)(nuint)Drastic.Interop.ObjC.Call(this.Handle, "keyEquivalentModifierMask");
+                    return (NSEventModifierMask)(nuint)Drastic.Interop.ObjC.Call(Handle, "keyEquivalentModifierMask");
                 }
 
                 set
                 {
                     if (value is not null)
                     {
-                        Drastic.Interop.ObjC.Call(this.Handle, "setKeyEquivalentModifierMask:", (nuint)value);
+                        Drastic.Interop.ObjC.Call(Handle, "setKeyEquivalentModifierMask:", (nuint)value);
                     }
                 }
             }
@@ -285,12 +285,12 @@ namespace Drastic.Tray
 
             private void SetTarget(IntPtr target)
             {
-                ObjC.Call(this.Handle, "setTarget:", target);
+                ObjC.Call(Handle, "setTarget:", target);
             }
 
             private void SetTag(long tag)
             {
-                ObjC.Call(this.Handle, "setTag:", new IntPtr(tag));
+                ObjC.Call(Handle, "setTag:", new IntPtr(tag));
             }
         }
     }
