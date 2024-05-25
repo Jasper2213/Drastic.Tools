@@ -3,8 +3,10 @@
 // </copyright>
 
 using System;
+using System.IO;
 using System.Runtime.InteropServices;
 using ObjCRuntime;
+using UIKit;
 
 namespace Drastic.Tray
 {

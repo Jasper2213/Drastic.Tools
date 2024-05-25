@@ -2,6 +2,11 @@
 // Copyright (c) Drastic Actions. All rights reserved.
 // </copyright>
 
+using System.Collections.Generic;
+using System.Drawing;
+using System.Linq;
+using System.Windows.Forms;
+
 namespace Drastic.Tray
 {
     /// <summary>
@@ -9,7 +14,7 @@ namespace Drastic.Tray
     /// </summary>
     public partial class TrayIcon : ITrayIcon
     {
-        private System.Windows.Forms.ContextMenuStrip contextMenuStrip;
+        private ContextMenuStrip contextMenuStrip;
         private NotifyIcon notifyIcon;
         private Icon? icon;
 

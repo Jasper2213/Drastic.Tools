@@ -2,6 +2,8 @@
 // Copyright (c) Drastic Actions. All rights reserved.
 // </copyright>
 
+using System.Collections.Generic;
+using System.IO;
 using System.Reflection;
 using Drastic.Tray;
 using Microsoft.UI.Xaml;

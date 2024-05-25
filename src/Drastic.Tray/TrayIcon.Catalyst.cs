@@ -3,13 +3,17 @@
 // </copyright>
 
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Reflection.Emit;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using AddressBook;
 using AppKit;
 using CoreFoundation;
+using CoreGraphics;
 using Drastic.Interop;
+using Foundation;
 using ObjCRuntime;
 using UIKit;
 

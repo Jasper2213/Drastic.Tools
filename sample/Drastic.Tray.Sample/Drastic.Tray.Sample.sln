@@ -5,8 +5,6 @@ VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Drastic.Tray.Sample.MacCatalyst", "Drastic.Tray.Sample.MacCatalyst\Drastic.Tray.Sample.MacCatalyst.csproj", "{9A0E3B9E-7DE6-4D5B-A38C-00A384F1C332}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Drastic.Tray.Sample.MacOS", "Drastic.Tray.Sample.MacOS\Drastic.Tray.Sample.MacOS.csproj", "{A35AC33E-12D2-4F61-9047-ABB3EEFFA946}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Drastic.Tray", "..\..\src\Drastic.Tray\Drastic.Tray.csproj", "{BFFE7E54-2715-4B4B-9316-91D63F787B0F}"
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Drastic.Interop", "..\..\src\Drastic.Interop\Drastic.Interop.shproj", "{55C248A2-4A67-468D-8010-E04849A081F1}"
@@ -47,22 +45,6 @@ Global
 		{9A0E3B9E-7DE6-4D5B-A38C-00A384F1C332}.Release|x86.ActiveCfg = Release|Any CPU
 		{9A0E3B9E-7DE6-4D5B-A38C-00A384F1C332}.Release|x86.Build.0 = Release|Any CPU
 		{9A0E3B9E-7DE6-4D5B-A38C-00A384F1C332}.Release|x86.Deploy.0 = Release|Any CPU
-		{A35AC33E-12D2-4F61-9047-ABB3EEFFA946}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A35AC33E-12D2-4F61-9047-ABB3EEFFA946}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A35AC33E-12D2-4F61-9047-ABB3EEFFA946}.Debug|ARM64.ActiveCfg = Debug|Any CPU
-		{A35AC33E-12D2-4F61-9047-ABB3EEFFA946}.Debug|ARM64.Build.0 = Debug|Any CPU
-		{A35AC33E-12D2-4F61-9047-ABB3EEFFA946}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{A35AC33E-12D2-4F61-9047-ABB3EEFFA946}.Debug|x64.Build.0 = Debug|Any CPU
-		{A35AC33E-12D2-4F61-9047-ABB3EEFFA946}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{A35AC33E-12D2-4F61-9047-ABB3EEFFA946}.Debug|x86.Build.0 = Debug|Any CPU
-		{A35AC33E-12D2-4F61-9047-ABB3EEFFA946}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A35AC33E-12D2-4F61-9047-ABB3EEFFA946}.Release|Any CPU.Build.0 = Release|Any CPU
-		{A35AC33E-12D2-4F61-9047-ABB3EEFFA946}.Release|ARM64.ActiveCfg = Release|Any CPU
-		{A35AC33E-12D2-4F61-9047-ABB3EEFFA946}.Release|ARM64.Build.0 = Release|Any CPU
-		{A35AC33E-12D2-4F61-9047-ABB3EEFFA946}.Release|x64.ActiveCfg = Release|Any CPU
-		{A35AC33E-12D2-4F61-9047-ABB3EEFFA946}.Release|x64.Build.0 = Release|Any CPU
-		{A35AC33E-12D2-4F61-9047-ABB3EEFFA946}.Release|x86.ActiveCfg = Release|Any CPU
-		{A35AC33E-12D2-4F61-9047-ABB3EEFFA946}.Release|x86.Build.0 = Release|Any CPU
 		{BFFE7E54-2715-4B4B-9316-91D63F787B0F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{BFFE7E54-2715-4B4B-9316-91D63F787B0F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BFFE7E54-2715-4B4B-9316-91D63F787B0F}.Debug|ARM64.ActiveCfg = Debug|Any CPU
