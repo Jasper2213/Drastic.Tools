@@ -9,8 +9,8 @@ namespace Drastic.Tray
 {
     public partial class TrayIcon : IDisposable
     {
-        private List<TrayMenuItem> menuItems { get; set; } = new List<TrayMenuItem>();
-        private bool disposedValue;
+        private List<TrayMenuItem> _menuItems { get; set; } = new List<TrayMenuItem>();
+        private bool _disposedValue;
 
         /// <summary>
         /// Left Clicked Event.
@@ -35,18 +35,18 @@ namespace Drastic.Tray
         /// <param name="disposing">Is Disposing.</param>
         protected virtual void Dispose(bool disposing)
         {
-            if (!disposedValue)
+            if (!_disposedValue)
             {
                 if (disposing)
                 {
                     NativeElementDispose();
                 }
 
-                disposedValue = true;
+                _disposedValue = true;
             }
         }
 
-#if !MACCATALYST && !WINDOWS && !MACOS
+#if !MACCATALYST && !WINDOWS
         /// <summary>
         /// Dispose Native Elements.
         /// </summary>

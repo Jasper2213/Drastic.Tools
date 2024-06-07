@@ -14,9 +14,9 @@ namespace Drastic.Tray
     /// </summary>
     public partial class TrayIcon : ITrayIcon
     {
-        private readonly ContextMenuStrip contextMenuStrip;
-        private readonly NotifyIcon notifyIcon;
-        private Icon? icon;
+        private readonly ContextMenuStrip _contextMenuStrip;
+        private readonly NotifyIcon _notifyIcon;
+        private Icon? _icon;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="TrayIcon"/> class.
@@ -26,16 +26,16 @@ namespace Drastic.Tray
         /// <param name="menuItems">Items to populate context menu. Optional.</param>
         public TrayIcon(string name, TrayImage image, List<TrayMenuItem>? menuItems = null)
         {
-            notifyIcon = new NotifyIcon();
+            _notifyIcon = new NotifyIcon();
             UpdateName(name);
             UpdateImage(image);
-            this.menuItems = menuItems ?? new List<TrayMenuItem>();
-            contextMenuStrip = new ContextMenuStrip();
-            contextMenuStrip.ItemClicked += ContextMenuStrip_ItemClicked;
-            notifyIcon.ContextMenuStrip = contextMenuStrip;
-            notifyIcon.MouseClick += NotifyIcon_MouseClick;
-            notifyIcon.Visible = true;
-            UpdateMenu(this.menuItems);
+            _menuItems = menuItems ?? new List<TrayMenuItem>();
+            _contextMenuStrip = new ContextMenuStrip();
+            _contextMenuStrip.ItemClicked += ContextMenuStrip_ItemClicked;
+            _notifyIcon.ContextMenuStrip = _contextMenuStrip;
+            _notifyIcon.MouseClick += NotifyIcon_MouseClick;
+            _notifyIcon.Visible = true;
+            UpdateMenu(_menuItems);
         }
 
         private void ContextMenuStrip_ItemClicked(object? sender, ToolStripItemClickedEventArgs e)
@@ -48,8 +48,8 @@ namespace Drastic.Tray
 
         private void NativeElementDispose()
         {
-            notifyIcon?.Dispose();
-            icon?.Dispose();
+            _notifyIcon?.Dispose();
+            _icon?.Dispose();
         }
 
         private void NotifyIcon_MouseClick(object? sender, MouseEventArgs e)
@@ -72,13 +72,18 @@ namespace Drastic.Tray
                 return new ToolStripSeparator();
             }
 
-            DrasticToolStripMenuItem menu = new DrasticToolStripMenuItem(item)
-            {
-                Text = item.Text
-            };
+            ToolStripMenuItem menu = new(item.Text);
             if (item.Icon is not null)
             {
                 menu.Image = item.Icon.Image;
+            }
+
+            if (item.SubMenuItems is not null)
+            {
+                foreach (var subItem in item.SubMenuItems)
+                {
+                    menu.DropDownItems.Add(GenerateItem(subItem));
+                }
             }
 
             return menu;
@@ -86,21 +91,23 @@ namespace Drastic.Tray
 
         public void UpdateMenu(IEnumerable<TrayMenuItem> menuItems)
         {
-            this.menuItems = menuItems.ToList();
-            contextMenuStrip.Items.Clear();
-            ToolStripItem[] items = this.menuItems.Select(n => GenerateItem(n)).Reverse().ToArray();
-            contextMenuStrip.Items.AddRange(items);
+            _menuItems = menuItems.ToList();
+            _contextMenuStrip.Items.Clear();
+
+            ToolStripItem[] items = _menuItems.Select(GenerateItem).ToArray();
+
+            _contextMenuStrip.Items.AddRange(items);
         }
 
         public void UpdateImage(TrayImage image)
         {
-            Bitmap test = new Bitmap(image?.Image!);
-            icon = Icon.FromHandle(test.GetHicon());
-            notifyIcon.Icon = icon;
+            Bitmap test = new(image?.Image!);
+            _icon = Icon.FromHandle(test.GetHicon());
+            _notifyIcon.Icon = _icon;
         }
 
         public void UpdateName(string name)
-            => notifyIcon.Text = name;
+            => _notifyIcon.Text = name;
 
         private class DrasticToolStripMenuItem : ToolStripMenuItem
         {

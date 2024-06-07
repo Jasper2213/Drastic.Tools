@@ -23,7 +23,7 @@ namespace Drastic.Tray.Sample.WinUI
             TrayImage trayImage = new TrayImage(System.Drawing.Image.FromStream(GetResourceFileContent("TrayIcon.ico")!));
             List<TrayMenuItem> menuItems = new List<TrayMenuItem>
             {
-                new TrayMenuItem("Hello!", trayImage, async () => { }),
+                new TrayMenuItem("Hello!", trayImage, async () => { }, new List<TrayMenuItem>() { new("Test") }),
                 new TrayMenuItem("From!", trayImage, async () => { }),
                 new TrayMenuItem("Windows!", trayImage, async () => { }),
             };

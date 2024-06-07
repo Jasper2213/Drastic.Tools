@@ -11,6 +11,7 @@
 		<PackageReleaseNotes>https://github.com/drasticactions/Drastic.Tools/blob/main/src/Drastic.Tray/CHANGELOG.md</PackageReleaseNotes>
 		<UseWindowsForms Condition="$(TargetFramework.Contains('-windows')) == true ">true</UseWindowsForms>
 		<EnableWindowsTargeting>true</EnableWindowsTargeting>
+    <Nullable>enable</Nullable>
 	</PropertyGroup>
 
 	<ItemGroup>

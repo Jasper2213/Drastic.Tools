@@ -3,6 +3,7 @@
 // </copyright>
 
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Drastic.Tray
@@ -27,11 +28,12 @@ namespace Drastic.Tray
         /// <param name="text">Menu Text.</param>
         /// <param name="icon">Icon.</param>
         /// <param name="action">Action to perform when clicked.</param>
-        public TrayMenuItem(string text, TrayImage? icon = null, Func<Task>? action = null)
+        public TrayMenuItem(string text, TrayImage? icon = null, Func<Task>? action = null, List<TrayMenuItem>? subMenuItems = null)
         {
             Text = text;
             Icon = icon;
             Action = action;
+            SubMenuItems = subMenuItems;
         }
 
 #if MACCATALYST
@@ -76,6 +78,8 @@ namespace Drastic.Tray
         /// Optional.
         /// </summary>
         public Func<Task>? Action { get; }
+
+        public List<TrayMenuItem>? SubMenuItems { get; }
 
 #if MACCATALYST
 
